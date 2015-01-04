@@ -1,7 +1,7 @@
 $(document).ready(function(){
-  var trueRed;
-  var trueBlue;
-  var trueGreen;
+  var trueRed = [];
+  var trueBlue = [];
+  var trueGreen = [];
   var tempChoice0;
   var tempChoice1;
   var tempChoice2;
@@ -19,12 +19,20 @@ $(document).ready(function(){
   var dropedRed = 0;
   var dropedBlue = 0;
   var dropedGreen = 0;
+  var count = 1;
+  var maxColors;
 
 
-  getColor();
-  redChoices();
-  greenChoices();
-  blueChoices();
+  getColors();
+  redChoices(0);
+  greenChoices(0);
+  blueChoices(0);
+  setGoal(0);
+
+  $('#red0').data({
+    'topRed0': $('#red0').css('top'),
+    'leftRed0': $('#red0').css('left')
+  });
 
   $(function() {
     $( ".draggable" ).draggable({ 
@@ -35,6 +43,7 @@ $(document).ready(function(){
       drop: function( event, ui ) {
         var draggableId = ui.draggable.attr("id");
         $('#' + draggableId).css('visibility', 'hidden');
+        $("#draggable").css('left');
         switch (draggableId) {
           case 'red0':
             dropedRed = redChoice0;
@@ -85,9 +94,9 @@ $(document).ready(function(){
       }
     });
   });
-  function redChoices() {
-    tempChoice0 = trueRed;
-    tempChoice1 = trueRed + 85;
+  function redChoices(number) {
+    tempChoice0 = trueRed[number];
+    tempChoice1 = trueRed[number] + 85;
     if (tempChoice1 > 255) {
       tempChoice1 -= 256;
     }
@@ -106,9 +115,9 @@ $(document).ready(function(){
     $('#red1').css('background-color', 'rgb('+redChoice1+',0,0)');
     $('#red2').css('background-color', 'rgb('+redChoice2+',0,0)');
   }
-  function greenChoices() {
-    tempChoice0 = trueGreen;
-    tempChoice1 = trueGreen + 85;
+  function greenChoices(number) {
+    tempChoice0 = trueGreen[number];
+    tempChoice1 = trueGreen[number] + 85;
     if (tempChoice1 > 255) {
       tempChoice1 -= 256;
     }
@@ -127,9 +136,9 @@ $(document).ready(function(){
     $('#green1').css('background-color', 'rgb(0,'+greenChoice1+',0)');
     $('#green2').css('background-color', 'rgb(0,'+greenChoice2+',0)');
   }
-  function blueChoices() {
-    tempChoice0 = trueBlue;
-    tempChoice1 = trueBlue + 85;
+  function blueChoices(number) {
+    tempChoice0 = trueBlue[number];
+    tempChoice1 = trueBlue[number] + 85;
     if (tempChoice1 > 255) {
       tempChoice1 -= 256;
     }
@@ -150,7 +159,7 @@ $(document).ready(function(){
   }
 
   function lockChoices(color) {
-    $('.' + color).draggable('destroy').css("opacity", "0.2");
+    $('.' + color).draggable('disable').css("opacity", "0.2");
     dropCheck++;
     if (dropCheck == 3) {
       $('#redResult').html(dropedRed);
@@ -169,17 +178,60 @@ $(document).ready(function(){
     else
       return 1; 
   }
+
+  function setGoal(number) {
+    $('#goal').css('background-color', 'rgb('+trueRed[number]+','+trueGreen[number]+','+trueBlue[number]+')');
+  }
+
+  function playAgain() {
+    $('#droppable').css('background-color', "transparent");
+    dropedRed = 0;
+    dropedGreen = 0;
+    dropedBlue = 0;
+    $('#red0').css({
+      'top': $('#red0').data('topRed0'),
+      'left': $('#red0').data('leftRed0')
+    });
+    $('.draggable').draggable('enable').css({"opacity":"1", "visibility":"visible"});
+    redChoices(count);
+    greenChoices(count);
+    blueChoices(count);
+    setGoal(count);
+    count++;
+    if (count == maxColors) {
+      count = 0;
+    }
+  }
+
+  $('#play-again').click(function() {
+    playAgain();
+  });
   
-  function getColor() {
+  function getColors() {
     $.ajax({
       url: 'data/color.json',
       async: false,
       dataType: 'json',
       success: function(data) {
-        trueRed = data.Color[0].Red;
-        trueGreen = data.Color[0].Green;
-        trueBlue = data.Color[0].Blue;
-        $('#goal').css('background-color', 'rgb('+trueRed+','+trueGreen+','+trueBlue+')');
+        maxColors = data.Color.length;
+        var getRandomNum;
+        var randomNum
+        console.log(maxColors);
+        var randomColorArr= [];
+        for (var i = 0; i < maxColors; i++) {
+          getRandomNum = true;
+          do {
+            randomNum = Math.floor(Math.random() * maxColors);
+            if (randomColorArr.indexOf(randomNum) === -1) {
+              randomColorArr[i] = randomNum;
+              console.log(randomColorArr[i]);
+              getRandomNum = false;
+            }
+          } while (getRandomNum);
+          trueRed[i] = data.Color[randomColorArr[i]].Red;
+          trueGreen[i] = data.Color[randomColorArr[i]].Green;
+          trueBlue[i] = data.Color[randomColorArr[i]].Blue;
+        }
       }
     });
   } 

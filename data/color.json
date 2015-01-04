@@ -6,13 +6,13 @@
       "Blue": 113
     },
     {
-      "Red": 0,
+      "Red": 200,
       "Green": 112,
-      "Blue": 0
+      "Blue": 5
     },
     {
       "Red": 0,
-      "Green": 0,
+      "Green": 190,
       "Blue": 55
     }
   ]
