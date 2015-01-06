@@ -3,37 +3,69 @@
 <head>
   <meta charset="utf-8">
   <title>Pure Project</title>
-  <!-- loads nicer when scripts come before css -->
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-  <script src="js/jquery-ui.min.custom.js"></script>
-  <script src="js/jquery.ui.touch-punch.min.js"></script> <!-- makes jQuery UI work on touch devices, http://touchpunch.furf.com/ -->
-  <script src="js/script.js"></script>
+  
   <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
   <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
   <main>
-    <div class="draggable red" id="red0"></div>
-    <div class="draggable red" id="red1"></div>
-    <div class="draggable red" id="red2"></div>
-    <div class="draggable green" id="green0"></div>
-    <div class="draggable green" id="green1"></div>
-    <div class="draggable green" id="green2"></div>
-    <div class="draggable blue" id="blue0"></div>
-    <div class="draggable blue" id="blue1"></div>
-    <div class="draggable blue" id="blue2"></div>
+    
+      <div class="container">
+          <div class="center draggable red" id="red0"></div>
+      </div>
+
+      <div class="container">
+          <div class="center draggable red" id="red1"></div>
+      </div> 
+
+      <div class="container">
+          <div class="center draggable red" id="red2"></div>
+      </div>
+    
+      <div class="container">
+          <div class="center draggable green" id="green0"></div>
+      </div>
+
+      <div class="container">
+          <div class="center draggable green" id="green1"></div>
+      </div>
+
+      <div class="container">
+          <div class="center draggable green" id="green2"></div>
+      </div>
+      
+
+      <div class="container">
+          <div class="center draggable blue" id="blue0"></div>
+      </div>
+
+      <div class="container">
+          <div class="center draggable blue" id="blue1"></div>
+      </div>
+      
+
+      
+      
+      
+
+      <div class="container">
+          <div class="center draggable blue" id="blue2"></div>
+      </div>
+    
     <div id="goal"></div>
     <div id="droppable" >
-      <p>Drop here</p>
     </div>
     <div id="feedback">
       <p>You made: rgb(<span id="redResult"></span>, <span id="greenResult"></span>, <span id="blueResult"></span>)</p>
+      <a href="#" id="try-again">Try again</a>
       <a href="#" id="play-again">Play again</a>
     </div>
     
 
   </main>
-
-  
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="js/jquery-ui.min.custom.js"></script>
+  <script src="js/jquery.ui.touch-punch.min.js"></script> <!-- makes jQuery UI work on touch devices, http://touchpunch.furf.com/ -->
+  <script src="js/script.js"></script>
 </body>
 </html>

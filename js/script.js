@@ -19,8 +19,13 @@ $(document).ready(function(){
   var dropedRed = 0;
   var dropedBlue = 0;
   var dropedGreen = 0;
-  var count = 1;
+  var count = 0;
   var maxColors;
+  var newGame;
+
+  var dropedRedID;
+  var dropedGreenID;
+  var dropedBlueID;
 
 
   getColors();
@@ -28,72 +33,87 @@ $(document).ready(function(){
   greenChoices(0);
   blueChoices(0);
   setGoal(0);
+  
+  dragDrop();
 
-  $('#red0').data({
-    'topRed0': $('#red0').css('top'),
-    'leftRed0': $('#red0').css('left')
-  });
-
-  $(function() {
-    $( ".draggable" ).draggable({ 
+  function dragDrop() {
+    $(".draggable").draggable({ 
       revert: 'invalid',
-      stack: '.draggable' 
+      stack: '.draggable',
     });
     $( "#droppable" ).droppable({
       drop: function( event, ui ) {
         var draggableId = ui.draggable.attr("id");
         $('#' + draggableId).css('visibility', 'hidden');
-        $("#draggable").css('left');
         switch (draggableId) {
           case 'red0':
             dropedRed = redChoice0;
             $('#droppable').css('background-color', "rgb("+dropedRed+","+dropedGreen+","+dropedBlue+")");
             lockChoices("red");
+            $('#red0').remove();
+            dropedRedID = 0;
             break;
           case 'red1':
             dropedRed = redChoice1;
             $('#droppable').css('background-color', "rgb("+dropedRed+","+dropedGreen+","+dropedBlue+")");
             lockChoices("red");
+            $('#red1').remove();
+            dropedRedID = 1;
             break;
           case 'red2':
             dropedRed = redChoice2;
             $('#droppable').css('background-color', "rgb("+dropedRed+","+dropedGreen+","+dropedBlue+")");
             lockChoices("red");
+            $('#red2').remove();
+            dropedRedID = 2;
             break;
           case 'green0':
             dropedGreen = greenChoice0;
             $('#droppable').css('background-color', "rgb("+dropedRed+","+dropedGreen+","+dropedBlue+")");
             lockChoices("green");
+            $('#green0').remove();
+            dropedGreenID = 0;
             break;
           case 'green1':
             dropedGreen = greenChoice1;
             $('#droppable').css('background-color', "rgb("+dropedRed+","+dropedGreen+","+dropedBlue+")");
             lockChoices("green");
+            $('#green1').remove();
+            dropedGreenID = 1;
             break;
           case 'green2':
             dropedGreen = greenChoice2;
             $('#droppable').css('background-color', "rgb("+dropedRed+","+dropedGreen+","+dropedBlue+")");
             lockChoices("green");
+            $('#green2').remove();
+            dropedGreenID = 2;
             break;
           case 'blue0':
             dropedBlue = blueChoice0;
             $('#droppable').css('background-color', "rgb("+dropedRed+","+dropedGreen+","+dropedBlue+")");
             lockChoices("blue");
+            $('#blue0').remove();
+            dropedBlueID = 0;
             break;
           case 'blue1':
             dropedBlue = blueChoice1;
             $('#droppable').css('background-color', "rgb("+dropedRed+","+dropedGreen+","+dropedBlue+")");
             lockChoices("blue");
+            $('#blue1').remove();
+            dropedBlueID = 1;
             break;
           case 'blue2':
             dropedBlue = blueChoice2;
             $('#droppable').css('background-color', "rgb("+dropedRed+","+dropedGreen+","+dropedBlue+")");
             lockChoices("blue");
+            $('#blue2').remove();
+            dropedBlueID = 2;
             break;
         }
       }
     });
-  });
+  }
+  
   function redChoices(number) {
     tempChoice0 = trueRed[number];
     tempChoice1 = trueRed[number] + 85;
@@ -106,7 +126,6 @@ $(document).ready(function(){
     }
     tempArr = [tempChoice0, tempChoice1, tempChoice2];
     tempArr = tempArr.sort(CompareForSort);
-    console.log("sort: " + tempArr[0]);
     redChoice0 = tempArr[0];
     redChoice1 = tempArr[1];
     redChoice2 = tempArr[2];
@@ -127,7 +146,6 @@ $(document).ready(function(){
     }
     tempArr = [tempChoice0, tempChoice1, tempChoice2];
     tempArr = tempArr.sort(CompareForSort);
-    console.log("sort: " + tempArr[0]);
     greenChoice0 = tempArr[0];
     greenChoice1 = tempArr[1];
     greenChoice2 = tempArr[2];
@@ -148,7 +166,6 @@ $(document).ready(function(){
     }
     tempArr = [tempChoice0, tempChoice1, tempChoice2];
     tempArr = tempArr.sort(CompareForSort);
-    console.log("sort: " + tempArr[0]);
     blueChoice0 = tempArr[0];
     blueChoice1 = tempArr[1];
     blueChoice2 = tempArr[2];
@@ -159,14 +176,19 @@ $(document).ready(function(){
   }
 
   function lockChoices(color) {
-    $('.' + color).draggable('disable').css("opacity", "0.2");
+    $('.' + color).draggable('destroy').css("opacity", "0.2");
     dropCheck++;
     if (dropCheck == 3) {
       $('#redResult').html(dropedRed);
       $('#greenResult').html(dropedGreen);
       $('#blueResult').html(dropedBlue);
       $('#feedback').show();
-
+      if ( ($('#droppable').css('background-color')) == ($('#goal').css('background-color')) ) {
+        newGame = true;
+        $('#play-again').show();
+      } else {
+        $('#try-again').show();
+      }
     }
   }
   // Sorts array elements in ascending order numerically.
@@ -183,29 +205,71 @@ $(document).ready(function(){
     $('#goal').css('background-color', 'rgb('+trueRed[number]+','+trueGreen[number]+','+trueBlue[number]+')');
   }
 
-  function playAgain() {
+
+  function resetGame() {
     $('#droppable').css('background-color', "transparent");
     dropedRed = 0;
     dropedGreen = 0;
     dropedBlue = 0;
-    $('#red0').css({
-      'top': $('#red0').data('topRed0'),
-      'left': $('#red0').data('leftRed0')
-    });
-    $('.draggable').draggable('enable').css({"opacity":"1", "visibility":"visible"});
+    dropCheck = 0;
+    $('.draggable').css({"opacity":"1", "visibility":"visible"});
+    if (dropedRedID == 0) {
+      $('.container').eq(0).append('<div class="center draggable red" id="red0"></div>');
+    }
+    if (dropedRedID == 1) {
+      $('.container').eq(1).append('<div class="center draggable red" id="red1"></div>');
+    }
+    if (dropedRedID == 2) {
+      $('.container').eq(2).append('<div class="center draggable red" id="red2"></div>');
+    }
+    if (dropedGreenID == 0) {
+      $('.container').eq(3).append('<div class="center draggable green" id="green0"></div>');
+    }
+    if (dropedGreenID == 1) {
+      $('.container').eq(4).append('<div class="center draggable green" id="green1"></div>');
+    }
+    if (dropedGreenID == 2) {
+      $('.container').eq(5).append('<div class="center draggable green" id="green2"></div>');
+    }
+    if (dropedBlueID == 0) {
+      $('.container').eq(6).append('<div class="center draggable blue" id="blue0"></div>');
+    }
+    if (dropedBlueID == 1) {
+      $('.container').eq(7).append('<div class="center draggable blue" id="blue1"></div>');
+    }
+    if (dropedBlueID == 2) {
+      $('.container').eq(8).append('<div class="center draggable blue" id="blue2"></div>');
+    }
+
+
+    if (newGame == true) {
+      count++;
+      if (count == maxColors) {
+        count = 0;
+      }
+      newGame = false; 
+    }
+    
     redChoices(count);
     greenChoices(count);
     blueChoices(count);
     setGoal(count);
-    count++;
-    if (count == maxColors) {
-      count = 0;
-    }
+
+    dragDrop();
+    
   }
 
   $('#play-again').click(function() {
-    playAgain();
+    resetGame();
+    $('#feedback, #play-again').hide();
   });
+
+  $('#try-again').click(function() {
+    resetGame();
+    $('#feedback, #try-again').hide();
+  });
+
+
   
   function getColors() {
     $.ajax({

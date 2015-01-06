@@ -1,11 +1,29 @@
-.draggable { 
-  width: 100px; 
-  height: 100px; 
+.container {
+  width: 80px; 
+  height: 80px; 
   border: 1px solid black; 
   margin: 15px;
-  display: inline-block; 
+  display: inline-block;
+  /*-webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  background-color: #aaa; */
 }
-    
+
+.center, .center-white {
+  width: 50%;
+  margin: 5px auto;
+  height: 70px;
+  width: 70px;
+  /*-webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;*/
+}
+
+.center-white {
+  background-color: #fff;
+}
+   
 #droppable, #goal { 
   width: 150px; 
   height: 150px; 
@@ -14,6 +32,8 @@
   float: left;
 }
     
-#feedback { 
+#feedback, #try-again, #play-again { 
   display: none;
 }
+
+
